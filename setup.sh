@@ -15,17 +15,33 @@ esac
 # OS-specific Logic
 if [ "$os" == "Linux" ]; then
     echo "Linux detected"
-    # Your logic here
+
+    # Install the Vundle plugin manager
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+    # Copy over this .vimrc into the system's vimrc
+    cp .vimrc ~/.vimrc
+
+    # Install all the Vundle plugins and then quit all windows in vim
+    vim -c "PluginInstall" -c "qa"
 fi
 
 if [ "$os" == "Mac" ]; then
     echo "Mac detected"
-    # Your logic here
+
+    # Install the Vundle plugin manager
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+    # Copy over this .vimrc into the system's vimrc
+    cp .vimrc ~/.vimrc
+
+    # Install all the Vundle plugins and then quit all windows in vim
+    vim -c "PluginInstall" -c "qa"
 fi
 
 if [ "$os" == "Windows" ]; then
     echo "Windows detected"
-    # Your logic here
+    echo "I don't use Windows computers so idk how to install vim the right way"
 fi
 
 # Check Python version
@@ -47,7 +63,7 @@ if [ -z "$python_path" ]; then
     exit 1
 fi
 
-# Installation logic
-cd ~/.vim/bundle/YouCompleteMe
+# Installation logic for YouCompleteMe completion engine
+cd ~/.vim/bundle/youcompleteme
 $python_path install.py --all
 
