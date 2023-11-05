@@ -17,6 +17,7 @@ call vundle#begin()
     Plugin 'lervag/vimtex'
     Plugin 'snakemake/snakefmt'
     Plugin 'https://github.com/snakemake/snakemake.git', {'rtp': 'misc/vim/'}
+    Plugin 'mg979/vim-visual-multi'
 
 call vundle#end()
 
