@@ -18,6 +18,7 @@ call vundle#begin()
     Plugin 'snakemake/snakefmt'
     Plugin 'https://github.com/snakemake/snakemake.git', {'rtp': 'misc/vim/'}
     Plugin 'mg979/vim-visual-multi'
+    Plugin 'tell-k/vim-autopep8'
 
 call vundle#end()
 
@@ -66,3 +67,11 @@ onoremap b i[|
 onoremap p i(|
 onoremap c i{|
 onoremap q i"|
+
+" Autopep8
+autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+let g:autopep8_disable_show_diff = 1
+let g:autopep8_aggressive = 1
+let g:autopep8_max_line_length = 100
+autocmd BufWritePre *.py Autopep8
+
