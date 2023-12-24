@@ -72,6 +72,11 @@ for py_version in $(ls /usr/bin | grep -E 'python3(\.[0-9]+)?$'); do
   
     if [ "$major_version" -eq 3 ] && [ "$minor_version" -ge 8 ]; then
         python_path="/usr/bin/$py_version"
+
+        # Installation logic for YouCompleteMe completion engine
+        cd ~/.vim/bundle/youcompleteme
+        $python_path install.py --all
+
         break
     fi
 done
@@ -81,7 +86,4 @@ if [ -z "$python_path" ]; then
     exit 1
 fi
 
-# Installation logic for YouCompleteMe completion engine
-cd ~/.vim/bundle/youcompleteme
-$python_path install.py --all
 
