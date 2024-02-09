@@ -13,5 +13,5 @@ toggleterm.setup({
 	persist_size = true,
 	direction = "float",
 	close_on_exit = false,
-	shell = "/bin/zsh",
+	shell = "/bin/bash",
 })
