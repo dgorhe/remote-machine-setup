@@ -115,6 +115,8 @@ return packer.startup(function(use)
 
 	use("github/copilot.vim")
 
+	-- use("bioSyntax/bioSyntax-vim")
+
 	if packer_bootstrap then
 		require("packer").sync()
 	end

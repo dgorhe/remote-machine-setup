@@ -13,6 +13,7 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 -- configure null_ls
 null_ls.setup({
+	debug = true,
 	-- setup formatters & linters
 	sources = {
 		--  to disable file types use
@@ -25,7 +26,11 @@ null_ls.setup({
 				return utils.root_has_file(".eslintrc.js") -- change file extension if you use something else
 			end,
 		}),
-		formatting.autopep8, -- python formatter?
+		formatting.clang_format, -- c/c++ formatter
+		formatting.autopep8, -- python formatter
+		diagnostics.shellcheck, -- shell linter
+		diagnostics.flake8, -- python linter
+		diagnostics.mypy, -- python linter for type checking
 	},
 	-- configure format on save
 	on_attach = function(current_client, bufnr)

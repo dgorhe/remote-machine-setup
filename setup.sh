@@ -15,29 +15,41 @@ esac
 # OS-specific Logic
 if [ "$os" == "Linux" ]; then
     echo "Linux detected"
+    
+    # Download packer.nvim if not already installed
+    if [ -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]; then
+        echo "packer.nvim is already installed"
+    else
+        git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim 
+    fi
 
-    # Install the Vundle plugin manager
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    # Download and set up neovim if not already installed
+    if [ command -v nvim &> /dev/null ]; then
+        echo "Neovim is already installed"
+    else
+        echo "Neovim is not installed, installing now..."
+        
+        wget -O $HOME/nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+        tar -xvzf $HOME/nvim-linux64.tar.gz 
+        rm -rf $HOME/nvim-linux64.tar.gz
+        sudo mv $HOME/nvim-linux64 /usr/local/nvim
+        export PATH=$PATH:/usr/local/nvim/bin
+    fi
 
-    # Copy over this .vimrc into the system's vimrc
-    cp .vimrc ~/.vimrc
-
-    # Install all the Vundle plugins and then quit all windows in vim
-    vim -c "PluginInstall" -c "qa"
-
-    # Install pre-requisites for youcompleteme on Ubuntu
-    sudo apt install build-essential cmake vim-nox python3-dev -y
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_current.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-    sudo apt install mono-complete golang nodejs openjdk-17-jdk openjdk-17-jre npm -y
+    # Install pre-requisites for plugins and LSP servers
+    sudo apt install npm python3-dev python3-pip cmake ripgrep fd-find -y
 
     # Install miniconda
-    mkdir -p ~/miniconda3
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-    rm -rf ~/miniconda3/miniconda.sh
-    ~/miniconda3/bin/conda init bash
+    if [ command -v conda &> /dev/null ]; then
+        echo "Miniconda is already installed"
+    else
+        echo "Miniconda is not installed, installing now..."
+        mkdir -p ~/miniconda3
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+        bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+        rm -rf ~/miniconda3/miniconda.sh
+        ~/miniconda3/bin/conda init bash
+    fi
 
     # Install Miniforge3
     wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
@@ -47,43 +59,21 @@ fi
 if [ "$os" == "Mac" ]; then
     echo "Mac detected"
 
-    # Install the Vundle plugin manager
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    # Download packer.nvim if not already installed
+    if [ -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]; then
+        echo "packer.nvim is already installed"
+    else
+        git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim 
+    fi
 
-    # Copy over this .vimrc into the system's vimrc
-    cp .vimrc ~/.vimrc
+    # Install neovim via Homebrew
+    brew install neovim
 
-    # Install all the Vundle plugins and then quit all windows in vim
-    vim -c "PluginInstall" -c "qa"
+    # Install pre-requisites for plugins and LSP servers
+    brew install npm python3 cmake ripgrep fd
 fi
 
 if [ "$os" == "Windows" ]; then
     echo "Windows detected"
-    echo "I don't use Windows computers so idk how to install vim the right way :/"
+    echo "I don't use Windows computers so I don't know how to install neovim the right way :/"
 fi
-
-# Check Python version
-python_path=""
-for py_version in $(ls /usr/bin | grep -E 'python3(\.[0-9]+)?$'); do
-    version_string=$(/usr/bin/$py_version -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' 2>/dev/null)
-    IFS='.' read -ra version_parts <<< "$version_string"
-    major_version=${version_parts[0]}
-    minor_version=${version_parts[1]}
-  
-    if [ "$major_version" -eq 3 ] && [ "$minor_version" -ge 8 ]; then
-        python_path="/usr/bin/$py_version"
-
-        # Installation logic for YouCompleteMe completion engine
-        cd ~/.vim/bundle/youcompleteme
-        $python_path install.py --all
-
-        break
-    fi
-done
-
-if [ -z "$python_path" ]; then
-    echo "No suitable Python version found in /usr/bin"
-    exit 1
-fi
-
-

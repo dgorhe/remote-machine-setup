@@ -20,3 +20,4 @@ require("darvesh.plugins.nvim-web-devicons")
 
 -- This isn't working as I would expect :/
 vim.cmd([[set guifont=/Users/darveshgorhe/Library/Fonts/MesloLGLNerdFontMono-Regular:h12]])
+vim.lsp.set_log_level("debug")
