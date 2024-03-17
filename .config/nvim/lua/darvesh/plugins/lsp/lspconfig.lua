@@ -57,7 +57,7 @@ for type, icon in pairs(signs) do
 end
 
 -- configure html server
-lspconfig["html-lsp"].setup({
+lspconfig["html"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
@@ -71,7 +71,7 @@ typescript.setup({
 })
 
 -- configure css server
-lspconfig["css-lsp"].setup({
+lspconfig["cssls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
@@ -110,16 +110,38 @@ lspconfig["lua_ls"].setup({
 	},
 })
 
+lspconfig["clangd"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	filetypes = { "c", "cpp" },
+	cmd = {
+		"clangd",
+		"--offset-encoding=utf-16",
+	},
+})
+
 lspconfig["jedi_language_server"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 	filetypes = { "py" },
 })
 
+-- lspconfig["mypy"].setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = on_attach,
+-- 	filetypes = { "py" },
+-- })
+
+lspconfig["r_language_server"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	filetypes = { "R", "Rscript" },
+})
+
 lspconfig["ltex"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
-	filetypes = { "tex" },
+	filetypes = { "tex", "bib" },
 })
 
 lspconfig["jsonls"].setup({
