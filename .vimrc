@@ -19,6 +19,7 @@ call vundle#begin()
     Plugin 'https://github.com/snakemake/snakemake.git', {'rtp': 'misc/vim/'}
     Plugin 'mg979/vim-visual-multi'
     Plugin 'tell-k/vim-autopep8'
+    Plugin 'bluz71/vim-nightfly-colors'
 
 call vundle#end()
 
@@ -75,3 +76,5 @@ let g:autopep8_aggressive = 1
 let g:autopep8_max_line_length = 100
 autocmd BufWritePre *.py Autopep8
 
+" Set colorscheme for vim
+colorscheme nightfly
